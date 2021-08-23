@@ -58,14 +58,5 @@ VERSION :
 	echo ' := X"$(SHA)";' >> $(VERSION_FILE)
 	echo 'end slow_version;' >> $(VERSION_FILE)
 .PHONY : VERSION
-# ------------------------------------------------------------------------------
-# Version symbols for FPGA bitstream generation etc
 
-# Something like 0.1-1-g5539563-dirty
-GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
-# 8 if dirty, 0 if clean
-DIRTY_PRE = $(shell \
-    python -c "print(8 if '$(GIT_VERSION)'.endswith('dirty') else 0)")
-# Something like 85539563
-SHA := $(DIRTY_PRE)$(shell git rev-parse --short=7 HEAD)
 
