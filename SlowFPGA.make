@@ -35,7 +35,7 @@ MAP_FLAGS = -detail -w -ol high -pr b
 PAR_FLAGS = -w -ol high
 TRCE_FLAGS = -e 3 -l 3
 
-$(BIT_FILE): VERSION $(LIST_FILE) src_dir
+$(BIT_FILE): $(VERSION_FILE) $(LIST_FILE) src_dir
 	xst -ifn $(SCR_FILE)
 	ngdbuild -uc $(UCF_FILE) $(POSTSYN_NETLIST)
 	map $(MAP_FLAGS) $(NGD_FILE) -o $(MAPPED_NCD_FILE) $(PCF_FILE)
@@ -49,7 +49,7 @@ $(BIN_FILE): $(BIT_FILE)
 #####################################################################
 # Create VERSION_FILE
 
-VERSION :
+$(VERSION_FILE) : $(VER)
 	rm -f $(VERSION_FILE)
 	echo 'library ieee;' >> $(VERSION_FILE)
 	echo 'use ieee.std_logic_1164.all;' >> $(VERSION_FILE)
@@ -57,6 +57,5 @@ VERSION :
 	echo -n 'constant SLOW_FPGA_VERSION: std_logic_vector(31 downto 0)' >> $(VERSION_FILE)
 	echo ' := X"$(SHA)";' >> $(VERSION_FILE)
 	echo 'end slow_version;' >> $(VERSION_FILE)
-.PHONY : VERSION
 
 

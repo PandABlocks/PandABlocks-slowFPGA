@@ -26,7 +26,7 @@ SLOW_BIN = $(BUILD_DIR)/slow_top.bin
 
 BITS_PREREQ += slow_fpga
 
-# Store the git hash in top-level build directory 
+# Store the git hash in top-level of build directory 
 VER = $(BUILD_DIR)/VERSION
 
 #default: $(DEFAULT_TARGETS)
@@ -34,14 +34,17 @@ VER = $(BUILD_DIR)/VERSION
 
 # Build SlowFPGA Firmware target
 
-$(SLOW_BIN): $(TOP)/SlowFPGA.make $(VER) | $(BUILD_DIR) update_VER
+slow_fpga: $(TOP)/SlowFPGA.make | $(BUILD_DIR) update_VER
 	echo building SlowFPGA
 	source $(ISE)  &&  \
 	  $(MAKE) -C $(BUILD_DIR) -f $< \
-	  TOP=$(TOP) SHA=$(SHA) bin
-
-slow_fpga : $(SLOW_BIN)
+	  TOP=$(TOP) SHA=$(SHA) VER=$(VER) bin
 .PHONY: slow_fpga
+
+$(SLOW_BIN) : slow_fpga
+
+test : $(SLOW_BIN)
+	touch $@
 
 $(BUILD_DIR): 
 	mkdir -p $(BUILD_DIR)
