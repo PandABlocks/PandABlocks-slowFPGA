@@ -24,13 +24,11 @@ include CONFIG
 
 SLOW_BIN = $(BUILD_DIR)/slow_top.bin
 
-BITS_PREREQ += slow_fpga
-
 # Store the git hash in top-level of build directory 
 VER = $(BUILD_DIR)/VERSION
 
-#default: $(DEFAULT_TARGETS)
-#.PHONY: default
+default: $(DEFAULT_TARGETS)
+.PHONY: default
 
 # Build SlowFPGA Firmware target
 
@@ -40,11 +38,6 @@ slow_fpga: $(TOP)/SlowFPGA.make | $(BUILD_DIR) update_VER
 	  $(MAKE) -C $(BUILD_DIR) -f $< \
 	  TOP=$(TOP) SHA=$(SHA) VER=$(VER) bin
 .PHONY: slow_fpga
-
-$(SLOW_BIN) : slow_fpga
-
-test : $(SLOW_BIN)
-	touch $@
 
 $(BUILD_DIR): 
 	mkdir -p $(BUILD_DIR)
@@ -74,4 +67,32 @@ else
 	then echo $(SHA) > $(VER); \
 	fi
 endif
+
+# ------------------------------------------------------------------------------
+# Build installation package
+
+ZPKG_LIST = panda-slowfpga.list
+ZPKG_FILE = panda-slowfpga@$(GIT_VERSION).zpg
+
+$(ZPKG_FILE): $(ZPKG_LIST) slow_fpga
+	$(MAKE_ZPKG) -b $(BUILD_DIR) \
+            $< $(GIT_VERSION)
+
+zpkg: $(ZPKG_FILE)
+.PHONY: zpkg
+
+#-------------------------------------------------------------------------------
+
+# Push a github release
+github-release: $(ZPKG_FILE)
+	$(MAKE_GITHUB_RELEASE) PandABlocks-slowFPGA $(GIT_VERSION) $<
+
+.PHONY: github-release
+
+# ------------------------------------------------------------------------------
+# Clean
+
+clean:
+	rm -rf $(BUILD_DIR)
+.PHONY: clean
 
