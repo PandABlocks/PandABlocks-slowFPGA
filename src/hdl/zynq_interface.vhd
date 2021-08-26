@@ -17,6 +17,7 @@ use ieee.std_logic_1164.all;
 library work;
 use work.support.all;
 use work.slow_defines.all;
+use work.slow_types.all;
 use work.slow_version.all;
 
 entity zynq_interface is

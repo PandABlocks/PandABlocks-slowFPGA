@@ -18,7 +18,7 @@ library unisim;
 use unisim.vcomponents.all;
 
 library work;
-use work.slow_defines.all;
+use work.slow_types.all;
 use work.support.all;
 
 entity temp_sensors is
