@@ -16,6 +16,7 @@ MAKE_ZPKG = $(PANDA_ROOTFS)/make-zpkg
 MAKE_GITHUB_RELEASE = $(PANDA_ROOTFS)/make-github-release.py
 
 BUILD_DIR = $(TOP)/build
+ZPKG_DIR = $(TOP)
 DEFAULT_TARGETS = zpkg
 
 # The CONFIG file is required.  If not present, create by copying CONFIG.example
@@ -40,7 +41,7 @@ slow_fpga: $(TOP)/SlowFPGA.make | $(BUILD_DIR) update_VER
 .PHONY: slow_fpga
 
 $(BUILD_DIR): 
-	mkdir -p $(BUILD_DIR)
+	mkdir -p $@
 
 # ------------------------------------------------------------------------------
 # Version symbols for FPGA bitstream generation etc
@@ -74,9 +75,12 @@ endif
 ZPKG_LIST = panda-slowfpga.list
 ZPKG_FILE = panda-slowfpga@$(GIT_VERSION).zpg
 
-$(ZPKG_FILE): $(ZPKG_LIST) slow_fpga
-	$(MAKE_ZPKG) -b $(BUILD_DIR) \
+$(ZPKG_FILE): $(ZPKG_LIST) slow_fpga | $(ZPKG_DIR)
+	$(MAKE_ZPKG) -b $(BUILD_DIR) -d $(ZPKG_DIR) \
             $< $(GIT_VERSION)
+
+$(ZPKG_DIR) :
+	mkdir -p $@
 
 zpkg: $(ZPKG_FILE)
 .PHONY: zpkg

@@ -7,6 +7,9 @@
 # Default build location.  Default is to build in build subdirectory.
 # BUILD_DIR = $(TOP)/build
 
+# Output directory for zpackages.
+# ZPKG_DIR = $(TOP)
+
 # Definitions needed for FPGA build
 export ISE = /dls_sw/FPGA/Xilinx/14.7/ISE_DS/settings64.sh
 export LM_LICENSE_FILE = 2100@diamcslicserv01.dc.diamond.ac.uk
