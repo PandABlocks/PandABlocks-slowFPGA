@@ -11,19 +11,16 @@
 # ZPKG_DIR = $(TOP)
 
 # Definitions needed for FPGA build
-export ISE = /dls_sw/FPGA/Xilinx/14.7/ISE_DS/settings64.sh
-export LM_LICENSE_FILE = 2100@diamcslicserv01.dc.diamond.ac.uk
+export ISE = /opt/Xilinx/14.7/ISE_DS/settings64.sh
+export LM_LICENSE_FILE =
 
 # Path to root filesystem
-PANDA_ROOTFS = /home/mga83/targetOS/PandABlocks-rootfs
+PANDA_ROOTFS = /repos/PandABlocks-rootfs
 # MAKE_ZPKG = $(PANDA_ROOTFS)/make-zpkg
 
 # Python interpreter for running scripts
 #
-# PYTHON = python2
-
-# Sphinx build for documentation.
-# SPHINX_BUILD = sphinx-build
+# PYTHON = python3
 
 # List of default targets to build when running make
 # DEFAULT_TARGETS = zpkg
