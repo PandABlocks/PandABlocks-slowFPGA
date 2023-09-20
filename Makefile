@@ -10,8 +10,7 @@ PANDA_ROOTFS = $(error Define PANDA_ROOTFS in CONFIG file)
 ISE = $(error Define ISE in CONFIG file)
 
 # Build defaults that can be overwritten by the CONFIG file if required
-PYTHON = python
-SPHINX_BUILD = sphinx-build
+PYTHON = python3
 MAKE_ZPKG = $(PANDA_ROOTFS)/make-zpkg
 MAKE_GITHUB_RELEASE = $(PANDA_ROOTFS)/make-github-release.py
 

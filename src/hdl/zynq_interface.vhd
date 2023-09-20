@@ -62,10 +62,11 @@ begin
     return X"00" &  "00000" & outenc & "00000" & inenc & X"0" & mode;
 end dcard_pack;
 
--- There are 32 status registers allocated for slow controller
-signal STATUS_LIST          : std32_array(31 downto 0) :=
+constant NUM_REGS           : natural := 18;
+
+signal STATUS_LIST          : std32_array(NUM_REGS-1 downto 0) :=
                                         (others => (others => '0'));
-signal register_index       : natural range 0 to 31;
+signal register_index       : natural range 0 to STATUS_LIST'HIGH;
 
 signal wr_req               : std_logic;
 signal wr_dat               : std_logic_vector(31 downto 0);
@@ -193,7 +194,7 @@ process(clk_i) begin
                 wr_adr <= TO_SVECTOR(register_index, 10);
                 wr_dat <= STATUS_LIST(register_index);
                 -- Keep track of registers
-                if (register_index = 31) then
+                if (register_index = NUM_REGS-1) then
                     register_index <= 0;
                 else
                     register_index <= register_index + 1;

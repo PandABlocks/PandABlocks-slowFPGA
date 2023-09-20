@@ -161,10 +161,9 @@ port map (
     dcard_ctrl3_io      => dcard_ctrl3_io,
     dcard_ctrl4_io      => dcard_ctrl4_io,
     -- Front Panel Shift Register Interface
-    OUTENC_CONN         => OUTENC_CONN,
     INENC_PROTOCOL      => INENC_PROTOCOL,
     OUTENC_PROTOCOL     => OUTENC_PROTOCOL,
-    DCARD_MODE          => DCARD_MODE
+    DCARD_MODE_o        => DCARD_MODE
 );
 
 --
