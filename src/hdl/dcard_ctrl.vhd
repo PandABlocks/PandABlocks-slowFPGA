@@ -30,8 +30,9 @@ port (
     dcard_ctrl3_io      : inout std_logic_vector(15 downto 0);
     dcard_ctrl4_io      : inout std_logic_vector(15 downto 0);
     -- Front Panel Shift Register Interface
-    INENC_PROTOCOL      : in  std3_array(3 downto 0);
-    OUTENC_PROTOCOL     : in  std3_array(3 downto 0);
+    OUTENC_CONN_i       : in  std_logic_vector(3 downto 0);
+    INENC_PROTOCOL_i    : in  std3_array(3 downto 0);
+    OUTENC_PROTOCOL_i   : in  std3_array(3 downto 0);
     DCARD_MODE_o        : out std4_array(3 downto 0)
 );
 end dcard_ctrl;
@@ -115,10 +116,12 @@ DCARD_MODE(3) <= dcard_ctrl4_io(15 downto 12);
 
 -- Assign CTRL values for Encoder ICs on the Daughter Card
 ENC_CTRL_GEN : FOR I IN 0 TO 3 GENERATE
-    inenc_ctrl(I) <= INENC_CONV(INENC_PROTOCOL(I));
-    outenc_ctrl(I) <= OUTENC_CONV(INENC_PROTOCOL(I))
-        when DCARD_MODE(I)(3 downto 1) = DCARD_MONITOR
-        else OUTENC_CONV(OUTENC_PROTOCOL(I));
+    inenc_ctrl(I) <= INENC_CONV(INENC_PROTOCOL_i(I));
+    outenc_ctrl(I) <= OUTENC_CONV(std3_t'("111"))
+            when OUTENC_CONN_i(I) = '0'
+        else OUTENC_CONV(INENC_PROTOCOL_i(I))
+            when DCARD_MODE(I)(3 downto 1) = DCARD_MONITOR
+        else OUTENC_CONV(OUTENC_PROTOCOL_i(I));
 END GENERATE;
 
 -- Interleave Input and Output Controls to the Daughter Card Pins.
@@ -128,3 +131,4 @@ dcard_ctrl3_io(11 downto 0) <= CONV_PADS(inenc_ctrl(2), outenc_ctrl(2), DCARD_MO
 dcard_ctrl4_io(11 downto 0) <= CONV_PADS(inenc_ctrl(3), outenc_ctrl(3), DCARD_MODE(3));
 
 end rtl;
+
