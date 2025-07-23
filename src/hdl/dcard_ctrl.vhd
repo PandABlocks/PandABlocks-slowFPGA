@@ -117,10 +117,10 @@ DCARD_MODE(3) <= dcard_ctrl4_io(15 downto 12);
 -- Assign CTRL values for Encoder ICs on the Daughter Card
 ENC_CTRL_GEN : FOR I IN 0 TO 3 GENERATE
     inenc_ctrl(I) <= INENC_CONV(INENC_PROTOCOL_i(I));
-    outenc_ctrl(I) <= OUTENC_CONV(std3_t'("111"))
-            when OUTENC_CONN_i(I) = '0'
-        else OUTENC_CONV(INENC_PROTOCOL_i(I))
+    outenc_ctrl(I) <= OUTENC_CONV(INENC_PROTOCOL_i(I))
             when DCARD_MODE(I)(3 downto 1) = DCARD_MONITOR
+        else OUTENC_CONV(std3_t'("111"))
+            when OUTENC_CONN_i(I) = '0'
         else OUTENC_CONV(OUTENC_PROTOCOL_i(I));
 END GENERATE;
 
