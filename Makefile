@@ -13,7 +13,7 @@ ISE = $(error Define ISE in CONFIG file)
 PYTHON = python3
 MAKE_ZPKG = $(PANDA_ROOTFS)/make-zpkg
 MAKE_GITHUB_RELEASE = $(PANDA_ROOTFS)/make-github-release.py
-MAKE_IPK = $(TOP)/scripts/make-fpga-ipk.sh
+MAKE_IPK = $(TOP)/packaging/make-fpga-ipk.sh
 
 BUILD_DIR = $(TOP)/build
 ZPKG_DIR = $(TOP)
@@ -74,14 +74,15 @@ endif
 
 ZPKG_LIST = panda-slowfpga.list
 ZPKG_FILE = panda-slowfpga@$(GIT_VERSION).zpg
-IPK_FILE = panda-slowfpga@$(GIT_VERSION).ipk
+IPK_FILE = panda-slowfpga_$(GIT_VERSION)_all.ipk
 
 $(ZPKG_FILE): $(ZPKG_LIST) slow_fpga | $(ZPKG_DIR)
 	$(MAKE_ZPKG) -b $(BUILD_DIR) -d $(ZPKG_DIR) \
             $< $(GIT_VERSION)
 
 $(IPK_FILE): slow_fpga
-	$(MAKE_IPK) -b $(BUILD_DIR) -d $(ZPKG_DIR) $(GIT_VERSION)
+	$(MAKE_IPK) $(TOP) $(BUILD_DIR) $(GIT_VERSION) && \
+	  mv -f $(BUILD_DIR)/$(IPK_FILE) $@
 
 $(ZPKG_DIR) :
 	mkdir -p $@
