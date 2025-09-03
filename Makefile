@@ -6,12 +6,11 @@ TOP := $(CURDIR)
 SHELL = /bin/bash
 
 # The following symbols MUST be defined in the CONFIG file before being used.
-PANDA_ROOTFS = $(error Define PANDA_ROOTFS in CONFIG file)
 ISE = $(error Define ISE in CONFIG file)
 
 # Build defaults that can be overwritten by the CONFIG file if required
 PYTHON = python3
-MAKE_GITHUB_RELEASE = $(PANDA_ROOTFS)/make-github-release.py
+MAKE_GITHUB_RELEASE = $(TOP)/make-github-release.py
 MAKE_IPK = $(TOP)/packaging/make-fpga-ipk.sh
 
 BUILD_DIR = $(TOP)/build
