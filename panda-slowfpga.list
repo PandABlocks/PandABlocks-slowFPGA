@@ -1,6 +1,0 @@
-# Directory structure
-d share/panda-fpga
-
-# Firmware
-b share/panda-fpga slow_top.bin
-

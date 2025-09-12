@@ -6,17 +6,15 @@ TOP := $(CURDIR)
 SHELL = /bin/bash
 
 # The following symbols MUST be defined in the CONFIG file before being used.
-PANDA_ROOTFS = $(error Define PANDA_ROOTFS in CONFIG file)
 ISE = $(error Define ISE in CONFIG file)
 
 # Build defaults that can be overwritten by the CONFIG file if required
 PYTHON = python3
-MAKE_ZPKG = $(PANDA_ROOTFS)/make-zpkg
-MAKE_GITHUB_RELEASE = $(PANDA_ROOTFS)/make-github-release.py
+MAKE_GITHUB_RELEASE = $(TOP)/make-github-release.py
+MAKE_IPK = $(TOP)/packaging/make-fpga-ipk.sh
 
 BUILD_DIR = $(TOP)/build
-ZPKG_DIR = $(TOP)
-DEFAULT_TARGETS = zpkg
+DEFAULT_TARGETS = ipk
 
 # The CONFIG file is required.  If not present, create by copying CONFIG.example
 # and editing as appropriate.
@@ -71,23 +69,19 @@ endif
 # ------------------------------------------------------------------------------
 # Build installation package
 
-ZPKG_LIST = panda-slowfpga.list
-ZPKG_FILE = panda-slowfpga@$(GIT_VERSION).zpg
+IPK_FILE = panda-slowfpga_$(GIT_VERSION)_all.ipk
 
-$(ZPKG_FILE): $(ZPKG_LIST) slow_fpga | $(ZPKG_DIR)
-	$(MAKE_ZPKG) -b $(BUILD_DIR) -d $(ZPKG_DIR) \
-            $< $(GIT_VERSION)
+$(IPK_FILE): slow_fpga
+	$(MAKE_IPK) $(TOP) $(BUILD_DIR) $(GIT_VERSION) && \
+	  mv -f $(BUILD_DIR)/$(IPK_FILE) $@
 
-$(ZPKG_DIR) :
-	mkdir -p $@
-
-zpkg: $(ZPKG_FILE)
-.PHONY: zpkg
+ipk: $(IPK_FILE)
+.PHONY: ipk
 
 #-------------------------------------------------------------------------------
 
 # Push a github release
-github-release: $(ZPKG_FILE)
+github-release: $(IPK_FILE)
 	$(MAKE_GITHUB_RELEASE) PandABlocks-slowFPGA $(GIT_VERSION) $<
 
 .PHONY: github-release
