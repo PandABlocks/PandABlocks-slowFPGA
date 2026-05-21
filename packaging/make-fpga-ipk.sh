@@ -34,4 +34,4 @@ sed -e "s|@PACKAGE@|$PACKAGE|" \
 FPGA_DIR="opt/share/$PACKAGE"
 mkdir -p "$FPGA_DIR"
 cp "$BUILD_DIR/slow_top.bin" "$FPGA_DIR"
-$TOP_DIR/packaging/opkg-utils/opkg-build -o 0 -g 0 -Z xz "$IPK_DIR" "$BUILD_DIR"
+$TOP_DIR/packaging/make-ipk.sh "$IPK_DIR" "$BUILD_DIR/${PACKAGE}_${VERSION}_all.ipk"
